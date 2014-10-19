@@ -4,11 +4,14 @@ debug = ARGUMENTS.get('debug', 0)
 if int(debug):
     env.Append(CXXFLAGS = ["-D_DEBUG"])
 
+puck_path = "contrib/puck"
+puck_include = puck_path + "/include"
+
 env.Append(CXXFLAGS = ["-std=c++0x", "-O3"])
 env.Append(CXXFLAGS = ["-Wall", "-Werror", "-g"])
 env.Append(CXXFLAGS = ["-Wno-format-security"])
 
-env.Append(CPPPATH = [".", "puck"])
+env.Append(CPPPATH = [".", "src", puck_path])
 env.Append(LINKFLAGS = ["-g", "-pthread"])
 
 gtest_path = "contrib/gmock/gtest"
@@ -26,9 +29,6 @@ gtest_main = env.Object(
     gtest_src + "/gtest_main.cc",
     CPPPATH = [gtest_path, gtest_include]
 )
-
-puck_path = "contrib/puck"
-puck_include = puck_path + "/puck"
 
 run_ut = env.Program(
     "test/run_ut",
