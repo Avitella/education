@@ -1,6 +1,6 @@
 [submodule "numerical_analysis/puck"]
-	path = numerical_analysis/contrib/puck
+	path = univarsity/numerical_analysis/contrib/puck
 	url = git@github.com:Avitella/puck.git
 [submodule "numerical_analysis/contrib/gmock"]
-	path = numerical_analysis/contrib/gmock
+	path = university/numerical_analysis/contrib/gmock
 	url = git@github.com:Avitella/gmock.git
