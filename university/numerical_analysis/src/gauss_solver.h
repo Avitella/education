@@ -24,8 +24,8 @@ struct wrong_sizes_error_t : public puck::exception_t {
 
 class gauss_solver_t {
  public:
-  void check_sizes(matrix_t const &matrix) const {
-    if (matrix.rows_count() != matrix.columns_count()) {
+  void check_sizes(matrix_t const &matrix, vector_t const &b) const {
+    if (matrix.rows_count() == 0 || matrix.rows_count() != matrix.columns_count() || matrix.rows_count() != b.size()) {
       throw wrong_sizes_error_t(matrix);
     }
   }
@@ -52,6 +52,23 @@ class gauss_solver_t {
       }
     }
     return matrix;
+  }
+
+  vector_t solve(matrix_t matrix, vector_t const &b) const {
+    check_sizes(matrix, b);
+    for (size_t i = 0; i < b.size(); ++i) {
+      matrix[i].push_back(b[i]);
+    }
+    matrix = triangulate_matrix(matrix);
+    vector_t answer(matrix.rows_count(), 0.0);
+    for (int i = matrix.rows_count() - 1; i >= 0; --i) {
+      answer[i] = matrix[i][matrix.columns_count() - 1];
+      for (int j = i + 1; j < (int) matrix.rows_count(); ++j) {
+        answer[i] -= matrix[i][j] * answer[j];
+      }
+      answer[i] /= matrix[i][i];
+    }
+    return answer;
   }
 
  private:

@@ -72,14 +72,7 @@ class matrix_t {
 inline std::ostream &operator << (std::ostream &out, matrix_t const &matrix) {
   out << "{";
   for (size_t i = 0; i < matrix.rows_count(); ++i) {
-    out << "{";
-    for (size_t j = 0; j < matrix.columns_count(); ++j) {
-      out << matrix[i][j];
-      if (j + 1 != matrix.columns_count()) {
-        out << ", ";
-      }
-    }
-    out << "}";
+    out << matrix[i];
     if (i + 1 != matrix.rows_count()) {
       out << ", ";
     }
