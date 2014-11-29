@@ -5,37 +5,86 @@
 #include <iostream>
 #include <vector>
 
+#include "vector.h"
+
 namespace numerical_analysis {
  
-using matrix_t = std::vector<std::vector<double>>;
+class matrix_t {
+ public:
+  size_t rows_count() const noexcept {
+    return matrix_.size();
+  }
 
-static bool matrix_equals(matrix_t const &a, matrix_t const &b, double eps = 1e-4) {
-  if (a.size() != b.size())
-    return false;
-  for (size_t i = 0; i < a.size(); ++i) {
-    if (a[i].size() != b[i].size()) {
+  size_t columns_count() const noexcept {
+    return matrix_.empty() ? 0 : matrix_.front().size();
+  }
+
+  vector_t &operator [] (size_t i) noexcept {
+    return matrix_[i];
+  }
+
+  vector_t const &operator [] (size_t i) const noexcept {
+    return matrix_[i];
+  }
+
+  matrix_t() noexcept {
+  }
+
+  matrix_t(matrix_t const &other) noexcept :
+      matrix_(other.matrix_) {
+  }
+
+  matrix_t(matrix_t &&other) noexcept {
+    std::swap(matrix_, other.matrix_);
+  }
+
+  matrix_t &operator = (matrix_t const &other) noexcept {
+    matrix_ = other.matrix_;
+    return *this;
+  }
+
+  matrix_t &operator = (matrix_t &&other) noexcept {
+    std::swap(matrix_, other.matrix_);
+    return *this;
+  }
+
+  matrix_t(std::initializer_list<vector_t> list) noexcept :
+      matrix_(list) {
+  }
+
+  bool operator == (matrix_t const &other) const noexcept {
+    if (rows_count() != other.rows_count() || columns_count() != other.columns_count())
       return false;
-    }
-    for (size_t j = 0; j < a[i].size(); ++j) {
-      if (abs(a[i][j] - b[i][j]) > eps) {
-        return false;
+    for (size_t i = 0; i < rows_count(); ++i) {
+      for (size_t j = 0; j < columns_count(); ++j) {
+        if (matrix_[i][j] != other.matrix_[i][j]) {
+          return false;
+        }
       }
     }
+    return true;
   }
-  return true;
-}
 
-std::string make_string(matrix_t const &matrix) {
-  std::string out;
-  for (size_t i = 0; i < matrix.size(); ++i) {
-    out += "{";
-    for (size_t j = 0; j < matrix[i].size(); ++j) {
-      out += std::to_string(matrix[i][j]);
-      if (j + 1 != matrix[i].size())
-        out += ",";
+ private:
+  std::vector<vector_t> matrix_;
+};
+
+inline std::ostream &operator << (std::ostream &out, matrix_t const &matrix) {
+  out << "{";
+  for (size_t i = 0; i < matrix.rows_count(); ++i) {
+    out << "{";
+    for (size_t j = 0; j < matrix.columns_count(); ++j) {
+      out << matrix[i][j];
+      if (j + 1 != matrix.columns_count()) {
+        out << ", ";
+      }
     }
-    out += "}\n";
+    out << "}";
+    if (i + 1 != matrix.rows_count()) {
+      out << ", ";
+    }
   }
+  out << "}";
   return out;
 }
 
