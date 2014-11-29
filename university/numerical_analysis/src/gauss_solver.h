@@ -6,21 +6,10 @@
 #include <puck/exception.h>
 
 #include "matrix.h"
+#include "error.h"
 #include "vector.h"
 
 namespace numerical_analysis {
-
-struct linearly_dependent_error_t : public puck::exception_t {
-  linearly_dependent_error_t() noexcept :
-      puck::exception_t("linearly dependent system") {
-  }
-};
-
-struct wrong_sizes_error_t : public puck::exception_t {
-  wrong_sizes_error_t(matrix_t const &matrix) noexcept :
-      puck::exception_t("rows count (%lu) != columns count (%lu)", matrix.rows_count(), matrix.columns_count()) {
-  }
-};
 
 class gauss_solver_t {
  public:

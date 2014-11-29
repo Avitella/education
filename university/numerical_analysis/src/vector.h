@@ -1,7 +1,11 @@
 #ifndef _NUMERICAL_ANALYSIS_VECTOR_H
 #define _NUMERICAL_ANALYSIS_VECTOR_H
 
+#include <cmath>
+#include <cstdlib>
 #include <vector>
+
+#include <puck/algo.h>
 
 namespace numerical_analysis {
 
@@ -9,6 +13,10 @@ class vector_t {
  public:
   vector_t(std::initializer_list<double> list) noexcept :
       vector_(list) {
+  }
+
+  vector_t(vector_t const &other) noexcept :
+      vector_(other.vector_) {
   }
 
   double &operator [] (size_t i) noexcept {
@@ -46,7 +54,73 @@ class vector_t {
     return true;
   }
 
+  double operator * (vector_t const &other) const noexcept {
+    assert(size() == other.size());
+    double answer = 0;
+    for (size_t i = 0; i < size(); ++i) {
+      answer += vector_[i] * other.vector_[i];
+    }
+    return answer;
+  }
+
+  vector_t &operator *= (double c) noexcept {
+    for (size_t i = 0; i < size(); ++i) {
+      vector_[i] *= c;
+    }
+    return *this;
+  }
+
+  vector_t operator * (double c) const noexcept {
+    vector_t result(*this);
+    return (result *= c);
+  }
+
+  vector_t operator / (double c) const noexcept {
+    return (*this) * (1.0 / c);
+  }
+
+  vector_t &operator += (vector_t const &other) noexcept {
+    assert(size() == other.size());
+    for (size_t i = 0; i < size(); ++i) {
+      vector_[i] *= other.vector_[i];
+    }
+    return *this;
+  }
+
+  vector_t operator + (vector_t const &other) const noexcept {
+    vector_t result(*this);
+    return (result += other);
+  }
+
+  vector_t &operator -= (vector_t const &other) noexcept {
+    assert(size() == other.size());
+    for (size_t i = 0; i < size(); ++i) {
+      vector_[i] -= other.vector_[i];
+    }
+    return *this;
+  }
+
+  vector_t operator - (vector_t const &other) const noexcept {
+    vector_t result(*this);
+    return (result -= other);
+  }
+
+  double norm() const noexcept {
+    return sqrt((*this) * (*this));
+  }
+
+  bool zero() const noexcept {
+    for (size_t i = 0; i < size(); ++i) {
+      if (puck::abs(vector_[i]) > EPS) {
+        return false;
+      }
+    }
+    return true;
+  }
+
  private:
+  static double constexpr EPS = 1e-9;
+
   std::vector<double> vector_;
 };
 
