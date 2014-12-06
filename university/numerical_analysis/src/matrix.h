@@ -23,8 +23,8 @@ class matrix_t {
     return matrix_[i];
   }
 
-  vector_t const &operator [] (size_t i) const noexcept {
-    return matrix_[i];
+  vector_t const &at(size_t i) const noexcept {
+    return matrix_.at(i);
   }
 
   matrix_t() noexcept {
@@ -63,7 +63,7 @@ class matrix_t {
     for (size_t i = 0; i < rows_count(); ++i) {
       for (size_t j = 0; j < rows_count(); ++j) {
         for (size_t k = 0; k < rows_count(); ++k) {
-          result[i][j] += matrix_[i][k] * other.matrix_[k][j];
+          result[i][j] += matrix_.at(i).at(k) * other.matrix_.at(k).at(j);
         }
       }
     }
@@ -74,7 +74,7 @@ class matrix_t {
     matrix_t result(columns_count(), rows_count(), 0.0);
     for (size_t i = 0; i < rows_count(); ++i) {
       for (size_t j = 0; j < columns_count(); ++j) {
-        result[j][i] = (*this)[i][j];
+        result[j][i] = (*this).at(i).at(j);
       }
     }
     return result;
@@ -85,7 +85,7 @@ class matrix_t {
     vector_t result(rows_count(), 0.0);
     for (size_t i = 0; i < rows_count(); ++i) {
       for (size_t j = 0; j < columns_count(); ++j) {
-        result[i] += other[j] * matrix_[i][j];
+        result[i] += other.at(j) * matrix_.at(i).at(j);
       }
     }
     return result;
@@ -96,7 +96,7 @@ class matrix_t {
       return false;
     for (size_t i = 0; i < rows_count(); ++i) {
       for (size_t j = 0; j < columns_count(); ++j) {
-        if (matrix_[i][j] != other.matrix_[i][j]) {
+        if (matrix_.at(i).at(j) != other.matrix_.at(i).at(j)) {
           return false;
         }
       }
@@ -111,7 +111,7 @@ class matrix_t {
 inline std::ostream &operator << (std::ostream &out, matrix_t const &matrix) {
   out << "{";
   for (size_t i = 0; i < matrix.rows_count(); ++i) {
-    out << matrix[i];
+    out << matrix.at(i);
     if (i + 1 != matrix.rows_count()) {
       out << ", ";
     }

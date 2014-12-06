@@ -20,7 +20,7 @@ class qr_solver_t : public solver_t {
   }
 
   vector_t solve(matrix_t const &matrix, vector_t const &b) const {
-    time_t start_clock = clock();
+    volatile clock_t start_clock = clock();
     check_sizes(matrix, b);
     matrix_t v = matrix.transpose();
     for (size_t i = 0; i < v.rows_count(); ++i) {

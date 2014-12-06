@@ -13,6 +13,8 @@ static size_t constexpr INIT = 773;
 vector_t gauss_answer, qr_answer;
 
 static matrix_t generate_matrix() {
+  clock_t start_clock = clock();
+
   matrix_t matrix(ROWS_COUNT, COLUMNS_COUNT, 0.0);
 
   for (size_t i = 0; i < ROWS_COUNT; ++i) {
@@ -23,6 +25,7 @@ static matrix_t generate_matrix() {
 
   matrix = matrix * matrix.transpose();
 
+  std::cerr << "generate matrix spent time: " << (clock() - start_clock) * 1.0 / CLOCKS_PER_SEC << std::endl;
   return matrix;
 }
 
@@ -44,7 +47,7 @@ TEST(gauss_solver, bigbadabam) {
 
   try {
     gauss_answer = solver.solve(matrix, b);
-    std::cerr << solver.spent_time() << std::endl;
+    std::cerr << "gauss solve spent time: " << solver.spent_time() << std::endl;
   } catch (puck::exception_t const &e) {
     std::cerr << e.what() << std::endl;
   }
@@ -60,7 +63,7 @@ TEST(qr_solver, bigbadaboom) {
 
   try {
     qr_answer = solver.solve(matrix, b);
-    std::cerr << solver.spent_time() << std::endl;
+    std::cerr << "qr solve spent time: " << solver.spent_time() << std::endl;
   } catch (puck::exception_t const &e) {
     std::cerr << e.what() << std::endl;
   }

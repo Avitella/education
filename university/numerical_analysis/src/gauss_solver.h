@@ -36,11 +36,11 @@ class gauss_solver_t : public solver_t {
   }
 
   virtual vector_t solve(matrix_t const &_matrix, vector_t const &b) const {
-    time_t start_clock = clock();
+    volatile clock_t start_clock = clock();
     matrix_t matrix(_matrix);
     check_sizes(matrix, b);
     for (size_t i = 0; i < b.size(); ++i) {
-      matrix[i].push_back(b[i]);
+      matrix[i].push_back(b.at(i));
     }
     matrix = triangulate_matrix(matrix);
     vector_t answer(matrix.rows_count(), 0.0);

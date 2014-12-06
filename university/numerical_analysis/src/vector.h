@@ -23,8 +23,8 @@ class vector_t {
     return vector_[i];
   }
 
-  double const &operator [] (size_t i) const noexcept {
-    return vector_[i];
+  double at(size_t i) const noexcept {
+    return vector_.at(i);
   }
 
   size_t size() const noexcept {
@@ -136,7 +136,7 @@ class vector_t {
 inline std::ostream &operator << (std::ostream &out, vector_t const &v) {
   out << "{";
   for (size_t i = 0; i < v.size(); ++i) {
-    out << v[i];
+    out << v.at(i);
     if (i + 1 != v.size()) {
       out << ", ";
     }
