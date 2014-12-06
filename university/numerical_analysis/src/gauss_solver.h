@@ -27,7 +27,7 @@ class gauss_solver_t {
           max_row = j;
         }
       }
-      if (abs(matrix[max_row][i]) < EPS) {
+      if (equal_to_(matrix[max_row][i], 0.0)) {
         throw linearly_dependent_error_t();
       }
       for (size_t j = i; j < matrix.columns_count(); ++j) {
@@ -61,7 +61,7 @@ class gauss_solver_t {
   }
 
  private:
-  static double constexpr EPS = 1e-9;
+  puck::equal_to_t<double> equal_to_;
 };
 
 }

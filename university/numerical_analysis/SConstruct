@@ -36,3 +36,10 @@ run_ut = env.Program(
     LIBS = [gtest],
     CPPPATH = env["CPPPATH"] + [gtest_include]
 )
+
+run_perf = env.Program(
+    "test/run_perf",
+    Glob("test/perf/*.cc") + [gtest_main],
+    LIBS = [gtest],
+    CPPPATH = env["CPPPATH"] + [gtest_include]
+)

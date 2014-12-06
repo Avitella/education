@@ -28,7 +28,7 @@ class qr_solver_t {
     check_sizes(matrix, b);
     matrix_t v = matrix.transpose();
     for (size_t i = 0; i < v.rows_count(); ++i) {
-      if (puck::abs(v[i].norm()) < EPS) {
+      if (equal_to_(v[i].norm(), 0.0)) {
         throw linearly_dependent_error_t();
       }
       v[i] = v[i] / v[i].norm();
@@ -50,7 +50,7 @@ class qr_solver_t {
   }
 
  private:
-  static double constexpr EPS = 1e-9;
+  puck::equal_to_t<double> equal_to_;
 };
 
 }
