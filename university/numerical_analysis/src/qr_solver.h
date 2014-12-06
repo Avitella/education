@@ -4,20 +4,15 @@
 #include <cassert>
 
 #include "vector.h"
+#include "solver.h"
 #include "matrix.h"
 #include "error.h"
 
 namespace numerical_analysis {
 
-class qr_solver_t {
+class qr_solver_t : public solver_t {
  public:
   qr_solver_t() noexcept {
-  }
-
-  void check_sizes(matrix_t const &matrix, vector_t const &b) const {
-    if (matrix.rows_count() == 0 || matrix.rows_count() != matrix.columns_count() || matrix.rows_count() != b.size()) {
-      throw wrong_sizes_error_t(matrix);
-    }
   }
 
   vector_t proj(vector_t const &u, vector_t const &v) const {
@@ -25,6 +20,7 @@ class qr_solver_t {
   }
 
   vector_t solve(matrix_t const &matrix, vector_t const &b) const {
+    time_t start_clock = clock();
     check_sizes(matrix, b);
     matrix_t v = matrix.transpose();
     for (size_t i = 0; i < v.rows_count(); ++i) {
@@ -38,14 +34,15 @@ class qr_solver_t {
     }
     matrix_t r = v * matrix;
     vector_t b1 = v * b;
-    vector_t answer(b.size(), 0);
+    vector_t answer(b1.size(), 0);
     for (int i = r.rows_count() - 1; i >= 0; --i) {
-      answer[i] = r[i][r.columns_count() - 1];
+      answer[i] = b1[i];
       for (int j = i + 1; j < (int) r.rows_count(); ++j) {
         answer[i] -= r[i][j] * answer[j];
       }
       answer[i] /= r[i][i];
     }
+    spent_time_ = (clock() - start_clock) * 1.0 / CLOCKS_PER_SEC;
     return answer;
   }
 

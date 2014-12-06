@@ -10,6 +10,8 @@ static size_t constexpr ROWS_COUNT = 1000;
 static size_t constexpr COLUMNS_COUNT = 1000;
 static size_t constexpr INIT = 773;
 
+vector_t gauss_answer, qr_answer;
+
 static matrix_t generate_matrix() {
   matrix_t matrix(ROWS_COUNT, COLUMNS_COUNT, 0.0);
 
@@ -41,7 +43,8 @@ TEST(gauss_solver, bigbadabam) {
   vector_t b = generate_answer();
 
   try {
-    vector_t answer = solver.solve(matrix, b);
+    gauss_answer = solver.solve(matrix, b);
+    std::cerr << solver.spent_time() << std::endl;
   } catch (puck::exception_t const &e) {
     std::cerr << e.what() << std::endl;
   }
@@ -56,8 +59,17 @@ TEST(qr_solver, bigbadaboom) {
   vector_t b = generate_answer();
 
   try {
-    vector_t answer = solver.solve(matrix, b);
+    qr_answer = solver.solve(matrix, b);
+    std::cerr << solver.spent_time() << std::endl;
   } catch (puck::exception_t const &e) {
     std::cerr << e.what() << std::endl;
+  }
+}
+
+TEST(perf, compare) {
+  puck::equal_to_t<double> eq(1e-9);
+  ASSERT_EQ(gauss_answer.size(), qr_answer.size());
+  for (size_t i = 0; i < gauss_answer.size(); ++i) {
+    ASSERT_TRUE(eq(gauss_answer[i], qr_answer[i])) << "gauss: " << gauss_answer[i] << ", qr: " << qr_answer[i];
   }
 }

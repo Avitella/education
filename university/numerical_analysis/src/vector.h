@@ -118,6 +118,15 @@ class vector_t {
     return true;
   }
 
+  bool equal_to(vector_t const &other, puck::equal_to_t<double> const &eq) const noexcept {
+    if (size() != other.size())
+      return false;
+    for (size_t i = 0; i < size(); ++i)
+      if (!eq(vector_[i], other.vector_[i])) 
+        return false;
+    return true;
+  }
+
  private:
   static double constexpr EPS = 1e-9;
 

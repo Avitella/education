@@ -3,6 +3,8 @@
 
 #include <puck/exception.h>
 
+#include "matrix.h"
+
 namespace numerical_analysis {
 
 struct linearly_dependent_error_t : public puck::exception_t {

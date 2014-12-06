@@ -3,22 +3,14 @@
 
 #include <algorithm>
 
-#include <puck/exception.h>
-
 #include "matrix.h"
-#include "error.h"
+#include "solver.h"
 #include "vector.h"
 
 namespace numerical_analysis {
 
-class gauss_solver_t {
+class gauss_solver_t : public solver_t {
  public:
-  void check_sizes(matrix_t const &matrix, vector_t const &b) const {
-    if (matrix.rows_count() == 0 || matrix.rows_count() != matrix.columns_count() || matrix.rows_count() != b.size()) {
-      throw wrong_sizes_error_t(matrix);
-    }
-  }
-
   matrix_t triangulate_matrix(matrix_t matrix) const {
     for (size_t i = 0; i < matrix.rows_count(); ++i) {
       size_t max_row = i;
@@ -43,7 +35,9 @@ class gauss_solver_t {
     return matrix;
   }
 
-  vector_t solve(matrix_t matrix, vector_t const &b) const {
+  virtual vector_t solve(matrix_t const &_matrix, vector_t const &b) const {
+    time_t start_clock = clock();
+    matrix_t matrix(_matrix);
     check_sizes(matrix, b);
     for (size_t i = 0; i < b.size(); ++i) {
       matrix[i].push_back(b[i]);
@@ -57,6 +51,7 @@ class gauss_solver_t {
       }
       answer[i] /= matrix[i][i];
     }
+    spent_time_ = (clock() - start_clock) * 1.0 / CLOCKS_PER_SEC;
     return answer;
   }
 
