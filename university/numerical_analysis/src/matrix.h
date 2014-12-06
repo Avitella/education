@@ -57,12 +57,13 @@ class matrix_t {
   }
 
   matrix_t operator * (matrix_t const &other) const noexcept {
-    assert(rows_count() == other.columns_count());
+    // TODO: fix it
+    assert(columns_count() == other.rows_count());
     matrix_t result(rows_count(), columns_count(), 0.0);
     for (size_t i = 0; i < rows_count(); ++i) {
       for (size_t j = 0; j < rows_count(); ++j) {
         for (size_t k = 0; k < rows_count(); ++k) {
-          result[i][j] += result[i][k] * result[k][j];
+          result[i][j] += matrix_[i][k] * other.matrix_[k][j];
         }
       }
     }
