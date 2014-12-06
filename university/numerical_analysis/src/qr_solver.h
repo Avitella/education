@@ -28,6 +28,9 @@ class qr_solver_t {
     check_sizes(matrix, b);
     matrix_t v = matrix.transpose();
     for (size_t i = 0; i < v.rows_count(); ++i) {
+      if (puck::abs(v[i].norm()) < EPS) {
+        throw linearly_dependent_error_t();
+      }
       v[i] = v[i] / v[i].norm();
       for (size_t j = i + 1; j < v.rows_count(); ++j) {
         v[j] -= proj(v[i], v[j]);
@@ -45,6 +48,9 @@ class qr_solver_t {
     }
     return answer;
   }
+
+ private:
+  static double constexpr EPS = 1e-9;
 };
 
 }
