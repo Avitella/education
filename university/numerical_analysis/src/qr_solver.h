@@ -21,10 +21,11 @@ class qr_solver_t : public solver_t {
     matrix_t v = matrix.transpose();
     vector_t buffer;
     for (size_t i = 0; i < v.rows_count(); ++i) {
-      if (equal_to_(v[i].norm(), 0.0)) {
+      double norm = v[i].norm();
+      if (equal_to_(norm, 0.0)) {
         throw linearly_dependent_error_t();
       }
-      v[i] /= v[i].norm();
+      v[i] /= norm;
       double nv = v[i] * v[i];
       for (size_t j = i + 1; j < v.rows_count(); ++j) {
         double mult = (v[i] * v[j]) / nv;
