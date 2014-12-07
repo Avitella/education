@@ -7,7 +7,7 @@ if int(debug):
 puck_path = "contrib/puck"
 puck_include = puck_path + "/include"
 
-env.Append(CXXFLAGS = ["-std=c++0x", "-Ofast"])
+env.Append(CXXFLAGS = ["-std=c++0x", "-Ofast", "-flto"])
 env.Append(CXXFLAGS = ["-Wall", "-Werror", "-g"])
 env.Append(CXXFLAGS = ["-Wno-format-security"])
 
