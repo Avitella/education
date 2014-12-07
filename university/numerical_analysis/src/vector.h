@@ -79,6 +79,13 @@ class vector_t {
     return (*this) * (1.0 / c);
   }
 
+  vector_t &operator /= (double c) noexcept {
+    for (size_t i = 0; i < vector_.size(); ++i) {
+      vector_[i] /= c;
+    }
+    return *this;
+  }
+
   vector_t &operator += (vector_t const &other) noexcept {
     assert(size() == other.size());
     for (size_t i = 0; i < size(); ++i) {

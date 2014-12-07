@@ -21,7 +21,9 @@ TEST(qr_solver, test_3x3) {
 
   vector_t answer = solver.solve(matrix, b);
 
-  EXPECT_TRUE(vector_t({0.0093877551020407866, -0.024326530612244913, -0.088326530612244936}) == answer) << answer;
+  puck::equal_to_t<double> eq(1e-9);
+
+  EXPECT_TRUE(vector_t({0.0093877551020407866, -0.024326530612244913, -0.088326530612244936}).equal_to(answer, eq)) << answer;
 }
 
 TEST(qr_solver, strong_solve) {

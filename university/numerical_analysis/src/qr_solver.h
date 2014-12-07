@@ -15,25 +15,19 @@ class qr_solver_t : public solver_t {
   qr_solver_t() noexcept {
   }
 
-  void proj(vector_t const &u, vector_t const &v, vector_t &buffer) const {
-    double mult = (u * v) / (u * u);
-    buffer.copy(u);
-    buffer *= mult;
-  }
-
   vector_t solve(matrix_t const &matrix, vector_t const &b) const {
     volatile clock_t start_clock = clock();
     check_sizes(matrix, b);
     matrix_t v = matrix.transpose();
-    vector_t buffer;
     for (size_t i = 0; i < v.rows_count(); ++i) {
       if (equal_to_(v[i].norm(), 0.0)) {
         throw linearly_dependent_error_t();
       }
-      v[i] = v[i] / v[i].norm();
+      v[i] /= v[i].norm();
+      double nv = v[i] * v[i];
       for (size_t j = i + 1; j < v.rows_count(); ++j) {
-        proj(v[i], v[j], buffer);
-        v[j] -= buffer;
+        double mult = (v[i] * v[j]) / nv;
+        v[j] -= v[i] * mult;
       }
     }
     matrix_t r = v * matrix;
