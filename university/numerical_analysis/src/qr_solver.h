@@ -19,6 +19,7 @@ class qr_solver_t : public solver_t {
     volatile clock_t start_clock = clock();
     check_sizes(matrix, b);
     matrix_t v = matrix.transpose();
+    vector_t buffer;
     for (size_t i = 0; i < v.rows_count(); ++i) {
       if (equal_to_(v[i].norm(), 0.0)) {
         throw linearly_dependent_error_t();
@@ -27,7 +28,9 @@ class qr_solver_t : public solver_t {
       double nv = v[i] * v[i];
       for (size_t j = i + 1; j < v.rows_count(); ++j) {
         double mult = (v[i] * v[j]) / nv;
-        v[j] -= v[i] * mult;
+        buffer.copy(v[i]);
+        buffer *= mult;
+        v[j] -= buffer;
       }
     }
     matrix_t r = v * matrix;
