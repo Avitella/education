@@ -43,3 +43,8 @@ run_perf = env.Program(
     LIBS = [gtest],
     CPPPATH = env["CPPPATH"] + [gtest_include]
 )
+
+numerical_analysis = env.Program(
+    "bin/numerical-analysis",
+    Glob("src/*.cc")
+)

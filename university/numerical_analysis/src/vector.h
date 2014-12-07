@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <cassert>
 #include <vector>
 
 #include <puck/algo.h>
