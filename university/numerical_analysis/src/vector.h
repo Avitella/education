@@ -127,6 +127,13 @@ class vector_t {
     return true;
   }
 
+  void copy(vector_t const &other) noexcept {
+    vector_.resize(other.vector_.size());
+    for (size_t i = 0; i < vector_.size(); ++i) {
+      vector_[i] = other.vector_[i];
+    }
+  }
+
  private:
   static double constexpr EPS = 1e-9;
 

@@ -57,13 +57,25 @@ class matrix_t {
   }
 
   matrix_t operator * (matrix_t const &other) const noexcept {
-    // TODO: fix it
-    assert(columns_count() == other.rows_count());
     matrix_t result(rows_count(), columns_count(), 0.0);
+    matrix_t buffer = other.transpose();
+    vector_t first(rows_count() * columns_count(), 0.0);
+    vector_t second(buffer.rows_count() * buffer.columns_count(), 0.0);
+    for (size_t i = 0; i < rows_count(); ++i) {
+      for (size_t j = 0; j < columns_count(); ++j) {
+        first[i * columns_count() + j] = matrix_.at(i).at(j);
+      }
+    }
+    for (size_t i = 0; i < buffer.rows_count(); ++i) {
+      for (size_t j = 0; j < buffer.columns_count(); ++j) {
+        second[i * buffer.columns_count() + j] = buffer.matrix_.at(i).at(j);
+      }
+    }
     for (size_t i = 0; i < rows_count(); ++i) {
       for (size_t j = 0; j < rows_count(); ++j) {
         for (size_t k = 0; k < rows_count(); ++k) {
-          result[i][j] += matrix_.at(i).at(k) * other.matrix_.at(k).at(j);
+          result[i][j] += first[i * rows_count() + k] * second[j * rows_count() + k];
+          //result[i][j] += matrix_.at(i).at(k) * buffer.at(j).at(k);
         }
       }
     }
