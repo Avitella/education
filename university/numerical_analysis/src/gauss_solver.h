@@ -19,29 +19,35 @@ class gauss_solver_t : public solver_t {
           max_row = j;
         }
       }
+      iterations_count_ += matrix.rows_count() - (i + 1);
       if (equal_to_(matrix[max_row][i], 0.0)) {
         throw linearly_dependent_error_t();
       }
       for (size_t j = i; j < matrix.columns_count(); ++j) {
         std::swap(matrix[i][j], matrix[max_row][j]);
       }
+      iterations_count_ += matrix.columns_count() - i;
       for (size_t j = i + 1; j < matrix.rows_count(); ++j) {
         double mult = matrix[j][i] / matrix[i][i];
         for (size_t k = i; k < matrix.columns_count(); ++k) {
           matrix[j][k] -= matrix[i][k] * mult;
         }
       }
+      iterations_count_ += (matrix.rows_count() - (i + 1)) * (matrix.columns_count() - i);
     }
     return matrix;
   }
 
   virtual vector_t solve(matrix_t const &_matrix, vector_t const &b) const {
-    volatile clock_t start_clock = clock();
+    iterations_count_ = 0;
+    clock_t start_clock = clock();
     matrix_t matrix(_matrix);
+    iterations_count_ += matrix.rows_count() * matrix.columns_count();
     check_sizes(matrix, b);
     for (size_t i = 0; i < b.size(); ++i) {
       matrix[i].push_back(b.at(i));
     }
+    iterations_count_ += b.size();
     matrix = triangulate_matrix(matrix);
     vector_t answer(matrix.rows_count(), 0.0);
     for (int i = matrix.rows_count() - 1; i >= 0; --i) {
@@ -51,6 +57,7 @@ class gauss_solver_t : public solver_t {
       }
       answer[i] /= matrix[i][i];
     }
+    iterations_count_ += matrix.rows_count() * (matrix.rows_count() - 1) / 2;
     spent_time_ = (clock() - start_clock) * 1.0 / CLOCKS_PER_SEC;
     return answer;
   }

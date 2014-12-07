@@ -23,8 +23,13 @@ class solver_t {
     return spent_time_;
   }
 
+  size_t iterations_count() const noexcept {
+    return iterations_count_;
+  }
+
  protected:
-  mutable volatile double spent_time_;
+  mutable double spent_time_;
+  mutable size_t iterations_count_;
 };
 
 }
