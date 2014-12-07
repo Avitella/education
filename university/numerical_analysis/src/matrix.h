@@ -72,9 +72,11 @@ class matrix_t {
       }
     }
     for (size_t i = 0; i < rows_count(); ++i) {
+      size_t ii = i * rows_count();
       for (size_t j = 0; j < rows_count(); ++j) {
+        size_t jj = j * rows_count();
         for (size_t k = 0; k < rows_count(); ++k) {
-          result[i][j] += first[i * rows_count() + k] * second[j * rows_count() + k];
+          result[i][j] += first[ii + k] * second[jj + k];
           //result[i][j] += matrix_.at(i).at(k) * buffer.at(j).at(k);
         }
       }
