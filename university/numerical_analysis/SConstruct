@@ -12,7 +12,7 @@ env.Append(CXXFLAGS = ["-Wall", "-Werror", "-g"])
 env.Append(CXXFLAGS = ["-Wno-format-security"])
 
 env.Append(CPPPATH = [".", "src", puck_path])
-env.Append(LINKFLAGS = ["-g", "-pthread"])
+env.Append(LINKFLAGS = ["-g"])
 
 gtest_path = "contrib/gmock/gtest"
 gtest_include = gtest_path + "/include"
