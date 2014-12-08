@@ -21,7 +21,6 @@ class qr_solver_t : public solver_t {
     check_sizes(matrix, b);
     matrix_t v = matrix.transpose();
     iterations_count_ += v.rows_count() * v.columns_count();
-    vector_t buffer;
     for (size_t i = 0; i < v.rows_count(); ++i) {
       double norm = v[i].norm();
       iterations_count_ += v[i].size();
@@ -30,15 +29,13 @@ class qr_solver_t : public solver_t {
       }
       v[i] /= norm;
       iterations_count_ += v[i].size();
-      double nv = v[i] * v[i];
-      iterations_count_ += v[i].size();
       for (size_t j = i + 1; j < v.rows_count(); ++j) {
-        double mult = (v[i] * v[j]) / nv;
-        buffer.copy(v[i]);
-        buffer *= mult;
-        v[j] -= buffer;
+        double mult = (v[i] * v[j]);
+        for (size_t k = 0; k < v[i].size(); ++k) {
+          v[j][k] -= v[i][k] * mult;
+        }
       }
-      iterations_count_ += (v.rows_count() - (i + 1)) * v[i].size() * 4;
+      iterations_count_ += (v.rows_count() - (i + 1)) * v[i].size() * 2;
     }
     matrix_t r = v * matrix;
     iterations_count_ += r.rows_count() * r.rows_count() * r.rows_count();
