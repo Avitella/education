@@ -1,0 +1,5 @@
+/bin
+/lib
+*.o
+/test/run_ut
+/test/run_perf
