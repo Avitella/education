@@ -17,16 +17,17 @@ transfers.write("StartsStationID\tEndsStationID\n")
 for l in data["lines"]:
     lineId = l
     name = data["lines"][l]["name"]
-    lines.write("%s\t%s\n" % (lineId, name))
+    lines.write("%s\t\"%s\"\n" % (lineId, name))
 
 for s in data["stations"]:
     stationId = s
     name = data["stations"][s]["name"]
     lineId = data["stations"][s]["lineId"]
-    stations.write("%s\t%s\t%s\n" % (stationId, lineId, name))
+    stations.write("%s\t%s\t\"%s\"\n" % (stationId, lineId, name))
 
 for t in data["transfers"]:
     ids = list(data["transfers"][t]["stationIds"])
     for i in range(len(ids)):
         for j in range(len(ids)):
-            transfers.write("%d\t%d\n" % (ids[i], ids[j]))
+            if i != j:
+                transfers.write("%d\t%d\n" % (ids[i], ids[j]))
