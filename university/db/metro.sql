@@ -33,6 +33,7 @@ DROP TABLE IF EXISTS `TurnstileRecord`;
 CREATE TABLE `TurnstileRecord` (
   `TurnstileRecordID` bigint(20) NOT NULL AUTO_INCREMENT,
   `MetroStationID` bigint(20) NOT NULL,
+  `Status` tinyint(4) NOT NULL DEFAULT '0',
   `Date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`TurnstileRecordID`),
   KEY `MetroStationID` (`MetroStationID`)
