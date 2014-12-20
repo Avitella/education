@@ -31,7 +31,7 @@ TEST(Lexer, Exception) {
 
 TEST(Lexer, ParseFunction) {
   Lexer lexer;
-  lexer.Parse("1 + x -    22 * 44 * (12 - x * sin(13)) / 31 * log(x)");
+  lexer.Parse("1 + x -    22 * 44 * (12 - x * sin(13)) / 31 * log(y)");
 
   ASSERT_EQ(TokenType::NUMBER, lexer.NextToken().GetType());
   ASSERT_TRUE(lexer.HasMoreTokens());
@@ -39,7 +39,7 @@ TEST(Lexer, ParseFunction) {
   ASSERT_EQ(TokenType::PLUS, lexer.NextToken().GetType());
   ASSERT_TRUE(lexer.HasMoreTokens());
 
-  ASSERT_EQ(TokenType::VARIABLE, lexer.NextToken().GetType());
+  ASSERT_EQ(TokenType::VARIABLE_X, lexer.NextToken().GetType());
   ASSERT_TRUE(lexer.HasMoreTokens());
 
   ASSERT_EQ(TokenType::MINUS, lexer.NextToken().GetType());
@@ -66,7 +66,7 @@ TEST(Lexer, ParseFunction) {
   ASSERT_EQ(TokenType::MINUS, lexer.NextToken().GetType());
   ASSERT_TRUE(lexer.HasMoreTokens());
 
-  ASSERT_EQ(TokenType::VARIABLE, lexer.NextToken().GetType());
+  ASSERT_EQ(TokenType::VARIABLE_X, lexer.NextToken().GetType());
   ASSERT_TRUE(lexer.HasMoreTokens());
 
   ASSERT_EQ(TokenType::MULTIPLY, lexer.NextToken().GetType());
@@ -102,7 +102,7 @@ TEST(Lexer, ParseFunction) {
   ASSERT_EQ(TokenType::OPENING_BRACKET, lexer.NextToken().GetType());
   ASSERT_TRUE(lexer.HasMoreTokens());
 
-  ASSERT_EQ(TokenType::VARIABLE, lexer.NextToken().GetType());
+  ASSERT_EQ(TokenType::VARIABLE_Y, lexer.NextToken().GetType());
   ASSERT_TRUE(lexer.HasMoreTokens());
 
   ASSERT_EQ(TokenType::CLOSING_BRACKET, lexer.NextToken().GetType());

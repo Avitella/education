@@ -9,7 +9,8 @@ namespace parser {
 enum class TokenType {
   UNKNOWN = -1,
   NUMBER,
-  VARIABLE,
+  VARIABLE_X,
+  VARIABLE_Y,
   OPENING_BRACKET,
   CLOSING_BRACKET,
   PLUS,

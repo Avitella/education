@@ -19,7 +19,7 @@ TEST(Token, MatchTypeString) {
   EXPECT_EQ(TokenType::COS, MatchTokenType("cos"));
   EXPECT_EQ(TokenType::LOG, MatchTokenType("log"));
   EXPECT_EQ(TokenType::EXP, MatchTokenType("exp"));
-  EXPECT_EQ(TokenType::VARIABLE, MatchTokenType("x"));
+  EXPECT_EQ(TokenType::VARIABLE_X, MatchTokenType("x"));
 }
 
 TEST(Token, CheckNumber) {

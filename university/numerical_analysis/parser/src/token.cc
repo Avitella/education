@@ -58,7 +58,9 @@ TokenType MatchTokenType(const std::string& s) noexcept {
   if (s == "exp")
     return TokenType::EXP;
   if (s == "x")
-    return TokenType::VARIABLE;
+    return TokenType::VARIABLE_X;
+  if (s == "y")
+    return TokenType::VARIABLE_Y;
   if (IsNumber(s))
     return TokenType::NUMBER;
   return TokenType::UNKNOWN;
