@@ -1,0 +1,43 @@
+env = Environment()
+
+debug = ARGUMENTS.get('debug', 0)
+if int(debug):
+    env.Append(CXXFLAGS = ["-D_DEBUG"])
+
+puck_path = "contrib/puck"
+puck_include = puck_path + "/include"
+
+env.Append(CXXFLAGS = ["-std=c++0x", "-Ofast", "-flto"])
+env.Append(CXXFLAGS = ["-Wall", "-Werror", "-g"])
+env.Append(CXXFLAGS = ["-Wno-format-security"])
+
+env.Append(CPPPATH = [".", "src", puck_path])
+env.Append(LINKFLAGS = ["-g"])
+
+gtest_path = "contrib/gmock/gtest"
+gtest_include = gtest_path + "/include"
+gtest_src = gtest_path + "/src"
+
+gtest = env.Object(
+    "lib/gtest.o",
+    gtest_src + "/gtest-all.cc",
+    CPPPATH = [gtest_path, gtest_include]
+)
+
+gtest_main = env.Object(
+    "lib/gtest_main.o",
+    gtest_src + "/gtest_main.cc",
+    CPPPATH = [gtest_path, gtest_include]
+)
+
+run_ut = env.Program(
+    "test/run_ut",
+    Glob("test/ut/*.cc") + [gtest_main] + Glob("src/*.cc"),
+    LIBS = [gtest],
+    CPPPATH = env["CPPPATH"] + [gtest_include]
+)
+
+# numerical_analysis = env.Program(
+#     "bin/numerical-analysis",
+#     Glob("src/*.cc")
+# )
