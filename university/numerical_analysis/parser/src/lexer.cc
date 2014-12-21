@@ -55,7 +55,7 @@ static void PushToken(char token, TokenQueue &tokens) {
   tokens.push(Token(token_type, std::string() + token));
 }
 
-ParseState ParseUnknown(char c, std::string& token, TokenQueue& tokens) {
+static ParseState ParseUnknown(char c, std::string& token, TokenQueue& tokens) {
   switch (c) {
     case '0'...'9': case '.':
       token += c;
@@ -75,7 +75,7 @@ ParseState ParseUnknown(char c, std::string& token, TokenQueue& tokens) {
   }
 }
 
-ParseState ParseNumber(char c, std::string& token, TokenQueue& tokens) {
+static ParseState ParseNumber(char c, std::string& token, TokenQueue& tokens) {
   switch (c) {
     case '0'...'9': case '.':
       token += c;
@@ -99,7 +99,7 @@ ParseState ParseNumber(char c, std::string& token, TokenQueue& tokens) {
   }
 }
 
-ParseState ParseLetter(char c, std::string& token, TokenQueue& tokens) {
+static ParseState ParseLetter(char c, std::string& token, TokenQueue& tokens) {
   switch (c) {
     case '0'...'9': case '.':
       MoveToken(token, tokens);
