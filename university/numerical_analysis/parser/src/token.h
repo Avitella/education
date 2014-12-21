@@ -20,13 +20,15 @@ enum class TokenType {
   SIN,
   COS,
   LOG,
-  EXP
+  EXP,
+  END
 };
 
 class Token {
  public:
   Token() noexcept;
   Token(const Token& other) noexcept;
+  explicit Token(TokenType token_type) noexcept;
   Token(TokenType token_type, const std::string& value) noexcept;
   TokenType GetType() const noexcept;
   const std::string& GetValue() const noexcept;

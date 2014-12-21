@@ -15,6 +15,7 @@ class Lexer {
   Lexer() noexcept;
   void Parse(std::string expr);
   Token NextToken() noexcept;
+  const Token& FrontToken() const noexcept;
   bool HasMoreTokens() const noexcept;
 
  private:

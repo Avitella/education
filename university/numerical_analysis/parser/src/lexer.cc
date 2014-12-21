@@ -21,6 +21,10 @@ Token Lexer::NextToken() noexcept {
   return result;
 }
 
+const Token& Lexer::FrontToken() const noexcept {
+  return tokens_.front();
+}
+
 bool Lexer::HasMoreTokens() const noexcept {
   return !tokens_.empty();
 }
@@ -139,6 +143,8 @@ void Lexer::Parse(std::string expr) {
         break;
     }
   }
+
+  tokens_.push(Token(TokenType::END));
 }
 
 }

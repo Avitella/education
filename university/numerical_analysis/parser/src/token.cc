@@ -71,6 +71,11 @@ Token::Token() noexcept :
     value_() {
 }
 
+Token::Token(TokenType token_type) noexcept :
+    token_type_(token_type),
+    value_() {
+}
+
 Token::Token(const Token& other) noexcept :
     token_type_(other.token_type_),
     value_(other.value_) {
