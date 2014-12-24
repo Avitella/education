@@ -8,7 +8,7 @@
 
 namespace parser {
 
-typedef std::queue<Token> TokenQueue;
+typedef std::deque<Token> TokenQueue;
 
 class Lexer {
  public:
@@ -16,6 +16,8 @@ class Lexer {
   void Parse(std::string expr);
   Token NextToken() noexcept;
   const Token& FrontToken() const noexcept;
+  void PushTokenFront(const Token& token) noexcept;
+  void PushTokenBack(const Token& token) noexcept;
   bool HasMoreTokens() const noexcept;
 
  private:

@@ -17,7 +17,7 @@ Lexer::Lexer() noexcept {
 
 Token Lexer::NextToken() noexcept {
   Token result = tokens_.front();
-  tokens_.pop();
+  tokens_.pop_front();
   return result;
 }
 
@@ -43,7 +43,7 @@ static void MoveToken(std::string &token, TokenQueue &tokens) {
     TokenType token_type = MatchTokenType(token);
     if (token_type == TokenType::UNKNOWN)
       throw UnknownTokenException(token);
-    tokens.push(Token(token_type, token));
+    tokens.push_back(Token(token_type, token));
     token.clear();
   }
 }
@@ -52,7 +52,7 @@ static void PushToken(char token, TokenQueue &tokens) {
   TokenType token_type = MatchTokenType(token);
   if (token_type == TokenType::UNKNOWN)
     throw UnknownTokenException(token);
-  tokens.push(Token(token_type, std::string() + token));
+  tokens.push_back(Token(token_type, std::string() + token));
 }
 
 static ParseState ParseUnknown(char c, std::string& token, TokenQueue& tokens) {
@@ -143,8 +143,14 @@ void Lexer::Parse(std::string expr) {
         break;
     }
   }
+}
 
-  tokens_.push(Token(TokenType::END));
+void Lexer::PushTokenFront(const Token& token) noexcept {
+  tokens_.push_front(token);
+}
+
+void Lexer::PushTokenBack(const Token& token) noexcept {
+  tokens_.push_back(token);
 }
 
 }
