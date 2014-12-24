@@ -38,24 +38,24 @@ enum class ParseState {
   END
 };
 
-static void MoveToken(std::string &token, TokenQueue &tokens) {
+static void MoveToken(std::string &token, size_t offset, TokenQueue &tokens) {
   if (!token.empty()) {
     TokenType token_type = MatchTokenType(token);
     if (token_type == TokenType::UNKNOWN)
       throw UnknownTokenException(token);
-    tokens.push_back(Token(token_type, token));
+    tokens.push_back(Token(token_type, offset, token));
     token.clear();
   }
 }
 
-static void PushToken(char token, TokenQueue &tokens) {
+static void PushToken(char token, size_t offset, TokenQueue &tokens) {
   TokenType token_type = MatchTokenType(token);
   if (token_type == TokenType::UNKNOWN)
     throw UnknownTokenException(token);
-  tokens.push_back(Token(token_type, std::string() + token));
+  tokens.push_back(Token(token_type, offset, std::string() + token));
 }
 
-static ParseState ParseUnknown(char c, std::string& token, TokenQueue& tokens) {
+static ParseState ParseUnknown(char c, size_t offset, std::string& token, TokenQueue& tokens) {
   switch (c) {
     case '0'...'9': case '.':
       token += c;
@@ -64,7 +64,7 @@ static ParseState ParseUnknown(char c, std::string& token, TokenQueue& tokens) {
       token += c;
       return ParseState::LETTER;
     case '+': case '-': case '*': case '/': case '(': case ')':
-      PushToken(c, tokens);
+      PushToken(c, offset, tokens);
       return ParseState::UNKNOWN;
     case ' ': case '\t': case '\n':
       return ParseState::UNKNOWN;
@@ -75,48 +75,48 @@ static ParseState ParseUnknown(char c, std::string& token, TokenQueue& tokens) {
   }
 }
 
-static ParseState ParseNumber(char c, std::string& token, TokenQueue& tokens) {
+static ParseState ParseNumber(char c, size_t offset, std::string& token, TokenQueue& tokens) {
   switch (c) {
     case '0'...'9': case '.':
       token += c;
       return ParseState::NUMBER;
     case 'a'...'z':
-      MoveToken(token, tokens);
+      MoveToken(token, offset, tokens);
       token += c;
       return ParseState::LETTER;
     case '+': case '-': case '*': case '/': case '(': case ')':
-      MoveToken(token, tokens);
-      PushToken(c, tokens);
+      MoveToken(token, offset, tokens);
+      PushToken(c, offset, tokens);
       return ParseState::UNKNOWN;
     case ' ': case '\t': case '\n':
-      MoveToken(token, tokens);
+      MoveToken(token, offset, tokens);
       return ParseState::UNKNOWN;
     case END_CHAR:
-      MoveToken(token, tokens);
+      MoveToken(token, offset, tokens);
       return ParseState::END;
     default:
       throw UnknownSymbolException(c);
   }
 }
 
-static ParseState ParseLetter(char c, std::string& token, TokenQueue& tokens) {
+static ParseState ParseLetter(char c, size_t offset, std::string& token, TokenQueue& tokens) {
   switch (c) {
     case '0'...'9': case '.':
-      MoveToken(token, tokens);
+      MoveToken(token, offset, tokens);
       token += c;
       return ParseState::NUMBER;
     case 'a'...'z':
       token += c;
       return ParseState::LETTER;
     case '+': case '-': case '*': case '/': case '(': case ')':
-      MoveToken(token, tokens);
-      PushToken(c, tokens);
+      MoveToken(token, offset, tokens);
+      PushToken(c, offset, tokens);
       return ParseState::UNKNOWN;
     case ' ': case '\t': case '\n':
-      MoveToken(token, tokens);
+      MoveToken(token, offset, tokens);
       return ParseState::UNKNOWN;
     case END_CHAR:
-      MoveToken(token, tokens);
+      MoveToken(token, offset, tokens);
       return ParseState::END;
     default:
       throw UnknownSymbolException(c);
@@ -128,16 +128,17 @@ void Lexer::Parse(std::string expr) {
 
   ParseState state = ParseState::UNKNOWN;
   std::string token;
-  for (char c : expr) {
+  for (size_t i = 0; i < expr.length(); ++i) {
+    char c = expr[i];
     switch (state) {
       case ParseState::UNKNOWN:
-        state = ParseUnknown(c, token, tokens_);
+        state = ParseUnknown(c, i, token, tokens_);
         break;
       case ParseState::NUMBER:
-        state = ParseNumber(c, token, tokens_);
+        state = ParseNumber(c, i, token, tokens_);
         break;
       case ParseState::LETTER:
-        state = ParseLetter(c, token, tokens_);
+        state = ParseLetter(c, i, token, tokens_);
         break;
       case ParseState::END:
         break;

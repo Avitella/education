@@ -2,16 +2,20 @@
 #include "solver.h"
 #include "lexer.h"
 
+#include <string>
+
 namespace parser {
 
-UnexpectedTokenException::UnexpectedTokenException(const Token&) noexcept {
+UnexpectedTokenException::UnexpectedTokenException(const Token& token) noexcept :
+    message_("Unexpected token: " + token.GetValue() + " at " + std::to_string(token.GetOffset())) {
 }
 
-UnexpectedTokenException::UnexpectedTokenException(TokenType) noexcept {
+UnexpectedTokenException::UnexpectedTokenException(TokenType) noexcept : 
+    message_("Unexpected token type") {
 }
 
 const char* UnexpectedTokenException::what() const noexcept {
-  return "";
+  return message_.c_str();
 }
 
 Parser::Parser() noexcept {
@@ -50,7 +54,7 @@ static SolverPtr MatchSolver(const Token& token) {
   }
 }
 
-static SolverPtr ParseSummand(Lexer *lexer);
+static SolverPtr ParseSummand(Lexer *lexer, bool with_bracket = false);
 
 static SolverPtr ParseBracket(Lexer *lexer) {
   if (!lexer->HasMoreTokens())
@@ -98,7 +102,7 @@ static SolverPtr ParseBracket(Lexer *lexer) {
       case TokenType::MINUS:
       {
         SolverPtr ptr = MatchSolver(lexer->NextToken());
-        ptr->SetRight(ParseSummand(lexer));
+        ptr->SetRight(ParseSummand(lexer, true)); // true: parse with bracket
         ptr->SetLeft(bracket);
         bracket = ptr;
         break;
@@ -144,7 +148,7 @@ static SolverPtr NextSummand(Lexer *lexer) {
   }
 }
 
-static SolverPtr ParseSummand(Lexer *lexer) {
+static SolverPtr ParseSummand(Lexer *lexer, bool with_bracket) {
   SolverPtr summand;
   while (lexer->HasMoreTokens()) {
     switch (lexer->FrontToken().GetType()) {
@@ -190,6 +194,14 @@ static SolverPtr ParseSummand(Lexer *lexer) {
         if (!summand)
           throw UnexpectedTokenException(lexer->FrontToken());
         return summand;
+      }
+      case TokenType::CLOSING_BRACKET:
+      {
+        if (with_bracket) {
+          if (!summand)
+            throw UnexpectedTokenException(lexer->FrontToken());
+          return summand;
+        }
       }
       default:
       {

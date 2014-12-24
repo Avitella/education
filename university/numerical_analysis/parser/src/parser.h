@@ -18,6 +18,9 @@ class UnexpectedTokenException : public std::exception {
   UnexpectedTokenException(const Token& token) noexcept;
   UnexpectedTokenException(TokenType type) noexcept;
   virtual const char* what() const noexcept;
+
+ private:
+  std::string message_;
 };
 
 }
