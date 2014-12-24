@@ -85,6 +85,7 @@ static SolverPtr ParseBracket(Lexer *lexer) {
       {
         if (!bracket)
           throw UnexpectedTokenException(Token(TokenType::END));
+        lexer->NextToken();
         return bracket;
       }
       case TokenType::SIN:

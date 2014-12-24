@@ -15,5 +15,5 @@ TEST(Parser, WithBracketsAndVariableX) {
   const std::string expr = "2 + 4 * (3 + x) + 2 * ((1 + 3 * (1 + 10))) - 4 * sin(x)";
   Parser parser;
   SolverPtr solver = parser.Parse(expr);
-  EXPECT_EQ(89.09070257317431, solver->Solve(2.0));
+  EXPECT_EQ(86.36281029269728, solver->Solve(2.0));
 }
