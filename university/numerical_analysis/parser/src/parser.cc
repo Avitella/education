@@ -65,13 +65,17 @@ static SolverPtr ParseBracket(Lexer *lexer) {
   SolverPtr bracket;
   while (lexer->HasMoreTokens()) {
     switch (lexer->FrontToken().GetType()) {
+      case TokenType::SIN:
+      case TokenType::COS:
+      case TokenType::EXP:
+      case TokenType::LOG:
       case TokenType::NUMBER:
       case TokenType::VARIABLE_X:
       case TokenType::VARIABLE_Y:
       {
         if (bracket)
           throw UnexpectedTokenException(lexer->FrontToken());
-        bracket = MatchSolver(lexer->NextToken());
+        bracket = ParseSummand(lexer, true); // true: parse with bracket
         break;
       }
       case TokenType::OPENING_BRACKET:
@@ -87,17 +91,6 @@ static SolverPtr ParseBracket(Lexer *lexer) {
           throw UnexpectedTokenException(Token(TokenType::END));
         lexer->NextToken();
         return bracket;
-      }
-      case TokenType::SIN:
-      case TokenType::COS:
-      case TokenType::EXP:
-      case TokenType::LOG:
-      {
-        if (bracket)
-          throw UnexpectedTokenException(lexer->FrontToken());
-        bracket = MatchSolver(lexer->NextToken());
-        bracket->SetRight(ParseBracket(lexer));
-        break;
       }
       case TokenType::PLUS:
       case TokenType::MINUS:
