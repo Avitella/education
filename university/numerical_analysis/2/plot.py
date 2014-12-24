@@ -13,5 +13,8 @@ for l in sys.stdin:
     x.append(a[0])
     y.append(a[1])
 
+pylab.xlabel("x")
+pylab.ylabel("y")
+
 pylab.plot(x, y)
 pylab.show()
