@@ -6,6 +6,17 @@
 
 namespace parser {
 
+void Solver::Print(std::ostream &out, size_t offset, size_t factor) const noexcept {
+  if (right_)
+    right_->Print(out, offset + 1, factor);
+  for (size_t i = 0; i < offset * factor; ++i) {
+    out << " ";
+  }
+  out << ToString() << std::endl;
+  if (left_)
+    left_->Print(out, offset + 1, factor);
+}
+
 const SolverPtr& Solver::GetLeft() const noexcept {
   return left_;
 }
@@ -31,14 +42,16 @@ double SolverVariableX::Solve(double x, double) const noexcept {
   return x;
 }
 
-void SolverVariableX::CheckOrThrow() const {
+std::string SolverVariableX::ToString() const noexcept {
+  return "x";
 }
 
 double SolverVariableY::Solve(double, double y) const noexcept {
   return y;
 }
 
-void SolverVariableY::CheckOrThrow() const {
+std::string SolverVariableY::ToString() const noexcept {
+  return "y";
 }
 
 SolverConstant::SolverConstant() noexcept {
@@ -52,7 +65,8 @@ double SolverConstant::Solve(double, double) const noexcept {
   return constant_;
 }
 
-void SolverConstant::CheckOrThrow() const {
+std::string SolverConstant::ToString() const noexcept {
+  return std::to_string(constant_);
 }
 
 double SolverPlus::Solve(double x, double y) const noexcept {
@@ -60,11 +74,8 @@ double SolverPlus::Solve(double x, double y) const noexcept {
   return left_ ? left_->Solve(x, y) + right_->Solve(x, y) : right_->Solve(x, y);
 }
 
-// TODO: std::exception -> ExpectedTokenException
-
-void SolverPlus::CheckOrThrow() const {
-  if (!right_)
-    throw std::exception();
+std::string SolverPlus::ToString() const noexcept {
+  return "+";
 }
 
 double SolverMinus::Solve(double x, double y) const noexcept {
@@ -72,9 +83,8 @@ double SolverMinus::Solve(double x, double y) const noexcept {
   return left_ ? left_->Solve(x, y) - right_->Solve(x, y) : right_->Solve(x, y);
 }
 
-void SolverMinus::CheckOrThrow() const {
-  if (!right_)
-    throw std::exception();
+std::string SolverMinus::ToString() const noexcept {
+  return "-";
 }
 
 double SolverMultiply::Solve(double x, double y) const noexcept {
@@ -83,9 +93,8 @@ double SolverMultiply::Solve(double x, double y) const noexcept {
   return left_->Solve(x, y) * right_->Solve(x, y);
 }
 
-void SolverMultiply::CheckOrThrow() const {
-  if (!left_ || !right_)
-    throw std::exception();
+std::string SolverMultiply::ToString() const noexcept {
+  return "*";
 }
 
 double SolverDivide::Solve(double x, double y) const noexcept {
@@ -94,9 +103,8 @@ double SolverDivide::Solve(double x, double y) const noexcept {
   return left_->Solve(x, y) / right_->Solve(x, y);
 }
 
-void SolverDivide::CheckOrThrow() const {
-  if (!left_ || !right_)
-    throw std::exception();
+std::string SolverDivide::ToString() const noexcept {
+  return "/";
 }
 
 double SolverSin::Solve(double x, double y) const noexcept {
@@ -105,9 +113,8 @@ double SolverSin::Solve(double x, double y) const noexcept {
   return sin(right_->Solve(x, y));
 }
 
-void SolverSin::CheckOrThrow() const {
-  if (left_ || !right_)
-    throw std::exception();
+std::string SolverSin::ToString() const noexcept {
+  return "sin";
 }
 
 double SolverCos::Solve(double x, double y) const noexcept {
@@ -116,9 +123,8 @@ double SolverCos::Solve(double x, double y) const noexcept {
   return cos(right_->Solve(x, y));
 }
 
-void SolverCos::CheckOrThrow() const {
-  if (left_ || !right_)
-    throw std::exception();
+std::string SolverCos::ToString() const noexcept {
+  return "cos";
 }
 
 double SolverExp::Solve(double x, double y) const noexcept {
@@ -127,9 +133,8 @@ double SolverExp::Solve(double x, double y) const noexcept {
   return exp(right_->Solve(x, y));
 }
 
-void SolverExp::CheckOrThrow() const {
-  if (left_ || !right_)
-    throw std::exception();
+std::string SolverExp::ToString() const noexcept {
+  return "exp";
 }
 
 double SolverLog::Solve(double x, double y) const noexcept {
@@ -138,9 +143,8 @@ double SolverLog::Solve(double x, double y) const noexcept {
   return log(right_->Solve(x, y));
 }
 
-void SolverLog::CheckOrThrow() const {
-  if (left_ || !right_)
-    throw std::exception();
+std::string SolverLog::ToString() const noexcept {
+  return "log";
 }
 
 }

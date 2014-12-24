@@ -24,3 +24,11 @@ TEST(Parser, Functions) {
   SolverPtr solver = parser.Parse(expr);
   EXPECT_EQ(-4955.169487907536, solver->Solve(1.0, 2.0));
 }
+
+TEST(Parser, Print) {
+  const std::string expr = "sin(x) + cos(x) + log(x) * exp(y) - 22 * (((0 * 29)) + 71) / (sin(x) * cos(x) * log(y)) + 21";
+  Parser parser;
+  SolverPtr solver = parser.Parse(expr);
+  std::cerr << expr << std::endl;
+  solver->Print(std::cerr, 0, 2);
+}
