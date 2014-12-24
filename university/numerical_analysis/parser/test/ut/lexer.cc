@@ -21,9 +21,6 @@ TEST(Lexer, Parse) {
   ASSERT_TRUE(lexer.HasMoreTokens());
 
   ASSERT_EQ(TokenType::NUMBER, lexer.NextToken().GetType());
-  ASSERT_TRUE(lexer.HasMoreTokens());
-
-  ASSERT_EQ(TokenType::END, lexer.NextToken().GetType());
   ASSERT_FALSE(lexer.HasMoreTokens());
 }
 
@@ -109,8 +106,5 @@ TEST(Lexer, ParseFunction) {
   ASSERT_TRUE(lexer.HasMoreTokens());
 
   ASSERT_EQ(TokenType::CLOSING_BRACKET, lexer.NextToken().GetType());
-  ASSERT_TRUE(lexer.HasMoreTokens());
-
-  ASSERT_EQ(TokenType::END, lexer.NextToken().GetType());
   ASSERT_FALSE(lexer.HasMoreTokens());
 }
