@@ -29,13 +29,15 @@ class Token {
   Token() noexcept;
   Token(const Token& other) noexcept;
   explicit Token(TokenType token_type) noexcept;
-  Token(TokenType token_type, const std::string& value) noexcept;
+  Token(TokenType token_type, size_t offset, const std::string& value) noexcept;
   TokenType GetType() const noexcept;
   const std::string& GetValue() const noexcept;
+  size_t GetOffset() const noexcept;
 
  private:
   TokenType token_type_;
   std::string value_;
+  size_t offset_;
 };
 
 class UnknownTokenException : public std::exception {

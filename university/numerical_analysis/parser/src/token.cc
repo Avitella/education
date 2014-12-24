@@ -70,22 +70,26 @@ TokenType MatchTokenType(const std::string& s) noexcept {
 
 Token::Token() noexcept :
     token_type_(TokenType::UNKNOWN),
-    value_() {
+    value_(),
+    offset_(0) {
 }
 
 Token::Token(TokenType token_type) noexcept :
     token_type_(token_type),
-    value_() {
+    value_(),
+    offset_(0) {
 }
 
 Token::Token(const Token& other) noexcept :
     token_type_(other.token_type_),
-    value_(other.value_) {
+    value_(other.value_),
+    offset_(other.offset_) {
 }
 
-Token::Token(TokenType token_type, const std::string& value) noexcept :
+Token::Token(TokenType token_type, size_t offset, const std::string& value) noexcept :
     token_type_(token_type),
-    value_(value) {
+    value_(value),
+    offset_(offset) {
 }
 
 TokenType Token::GetType() const noexcept {
@@ -94,6 +98,10 @@ TokenType Token::GetType() const noexcept {
 
 const std::string& Token::GetValue() const noexcept {
   return value_;
+}
+
+size_t Token::GetOffset() const noexcept {
+  return offset_;
 }
 
 }
