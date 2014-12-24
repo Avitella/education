@@ -33,7 +33,7 @@ gtest_main = env.Object(
 run_ut = env.Program(
     "test/run_ut",
     Glob("test/ut/*.cc") + [gtest_main] + Glob("src/*.cc"),
-    LIBS = [gtest],
+    LIBS = [gtest, "pthread"],
     CPPPATH = env["CPPPATH"] + [gtest_include]
 )
 
