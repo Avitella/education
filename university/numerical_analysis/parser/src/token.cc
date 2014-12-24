@@ -1,5 +1,7 @@
 #include "token.h"
 
+#include <algorithm>
+
 namespace parser {
 
 static const std::string UNKNOWN_TOKEN = "Unknown token: ";
