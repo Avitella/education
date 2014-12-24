@@ -17,3 +17,10 @@ TEST(Parser, WithBracketsAndVariableX) {
   SolverPtr solver = parser.Parse(expr);
   EXPECT_EQ(86.36281029269728, solver->Solve(2.0));
 }
+
+TEST(Parser, Functions) {
+  const std::string expr = "sin(x) + cos(x) + log(x) * exp(y) - 22 * (((0 * 29)) + 71) / (sin(x) * cos(x) * log(y))";
+  Parser parser;
+  SolverPtr solver = parser.Parse(expr);
+  EXPECT_EQ(-4955.169487907536, solver->Solve(1.0, 2.0));
+}
