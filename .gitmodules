@@ -13,3 +13,6 @@
 [submodule "university/numerical_analysis/parser/contrib/gmock"]
 	path = university/numerical_analysis/parser/contrib/gmock
 	url = git@github.com:Avitella/gmock.git
+[submodule "university/numerical_analysis/3/contrib/gmock"]
+	path = university/numerical_analysis/3/contrib/gmock
+	url = git@github.com:Avitella/gmock.git
